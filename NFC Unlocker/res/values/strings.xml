@@ -9,5 +9,6 @@
     <string name="action_add">Add Tag</string>
     <string name="title_activity_add">Add Tag</string>
     <string name="tag_name">Tag Name</string>
+    <string name="device_admin_description">Needed to unlock your secured lock screen</string>
 
 </resources>

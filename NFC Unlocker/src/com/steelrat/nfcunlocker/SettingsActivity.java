@@ -1,13 +1,22 @@
 package com.steelrat.nfcunlocker;
 
 import android.annotation.TargetApi;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -25,7 +34,7 @@ import com.actionbarsherlock.view.MenuItem;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends SherlockPreferenceActivity {
+public class SettingsActivity extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	/**
 	 * Determines whether to always show the simplified settings UI, where
 	 * settings are presented in a single list. When false, settings are shown
@@ -33,12 +42,20 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 	 * shown on tablets.
 	 */
 	private static final boolean ALWAYS_SIMPLE_PREFS = false;
-
+	ComponentName mAppDeviceAdmin;
+	DevicePolicyManager mDPM;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		mDPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+		mAppDeviceAdmin = new ComponentName(this, AppDeviceAdminReceiver.class);
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
 	}
 	
 	@Override
@@ -46,6 +63,22 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 		super.onPostCreate(savedInstanceState);
 
 		setupSimplePreferencesScreen();
+		
+		Preference passwordPref = (Preference) findPreference("password");
+		passwordPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+            	// Launch the activity to have the user enable our admin.
+                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mAppDeviceAdmin);
+                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                        getString(R.string.device_admin_description));
+                startActivityForResult(intent, 1);
+                
+            	return false;
+            }
+        });
 	}
 
 	/**
@@ -90,7 +123,7 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 				|| Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
 				|| !isXLargeTablet(context);
 	}
-
+	
 	/** {@inheritDoc} */
 	@Override
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -101,7 +134,7 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 	}
 
 	/**
-	 * This fragment shows general preferences only. It is used when the
+	 * This fragment shows "General" preferences only. It is used when the
 	 * activity is showing a two-pane settings UI.
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -110,6 +143,19 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.pref_general);
+		}
+	}
+	
+	/**
+	 * This fragment shows "About" preferences only. It is used when the
+	 * activity is showing a two-pane settings UI.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static class AboutPreferenceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			//addPreferencesFromResource(R.xml.pref_about);
 		}
 	}
 	
@@ -129,5 +175,20 @@ public class SettingsActivity extends SherlockPreferenceActivity {
 		}	
 		
 		return true;
+	}
+	
+	private boolean isActiveAdmin() {
+		return mDPM.isAdminActive(mAppDeviceAdmin);
+	}
+	
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (isActiveAdmin()) {
+			Log.i("onSharedPreferenceChanged", "isActiveAdmin");
+			boolean success = mDPM.resetPassword(sharedPreferences.getString(key, ""), 0);
+			Log.i("onSharedPreferenceChanged", "result=" + (success ? "yes" : "no"));
+		} else {
+			Log.i("onSharedPreferenceChanged", "device admin not active");
+		}
 	}
 }

@@ -24,6 +24,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -32,6 +33,7 @@
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -43,6 +45,20 @@
             android:name="com.steelrat.nfcunlocker.AddActivity"
             android:label="@string/title_activity_add" >
         </activity>
+
+        <receiver
+            android:name="com.steelrat.nfcunlocker.AppDeviceAdminReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/app_device_admin" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+        
+        <service android:name=".FlagUnlock$FlagUpdateService"></service>
     </application>
 
 </manifest>

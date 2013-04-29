@@ -1,7 +1,5 @@
 package com.steelrat.nfcunlocker;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,24 +8,51 @@ import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
+import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.WindowManager;
 
 public class DiscoveredActivity extends Activity {
-	KeyguardLock keyguard;
+	UnlockMethod mUnlockMethod;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+         
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String password = sharedPref.getString("password", "");
 		
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        mUnlockMethod = new FlagUnlock(this, password);
+        mUnlockMethod.unlock();
+		
+		mUnlockMethod.onActivityEvent("onCreate");
+		
+		//Get the window from the context
+        //WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+		/*DevicePolicyManager DPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        DPM.resetPassword("", 0);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         
-        Log.i("onCreate", "Tag scanned");
+        Intent i = new Intent(this, UpdateService.class);
+        startService(i);*/
         
-        // Get keyguard manager instance for check.
-        KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);  
+        /*DevicePolicyManager DPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        DPM.resetPassword("", 0);
+        keyguard = NFCApplication.getKeyguardLock();
+        keyguard.disableKeyguard();
         
-        // Get password from settings.
+        Intent i = new Intent(this, UpdateService.class);
+        startService(i);*/
+        
+        /*// Get password from settings.
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String syncConnPref = sharedPref.getString("password", "");
+        String password = sharedPref.getString("password", "");
         
         // Check if screen is locked now + password set by user.
         if (keyguardManager.inKeyguardRestrictedInputMode() && !syncConnPref.isEmpty()) {
@@ -40,8 +65,28 @@ public class DiscoveredActivity extends Activity {
             NFCApplication.runAsRoot(cmds);
         } else {
         	Log.i("onCreate", "Keyguard disabled");
-        }
+        }*/
         
-		finish();
+        //finish();
     }
+	
+	@Override
+	public void onAttachedToWindow() {	
+		// TODO Auto-generated method stub
+		super.onAttachedToWindow();
+	
+		/*SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String password = sharedPref.getString("password", "");
+		
+		DevicePolicyManager DPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);               
+        DPM.resetPassword(password, 0);*/
+		mUnlockMethod.onActivityEvent("onAttachedToWindow");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+        
+        mUnlockMethod.onActivityEvent("onDestroy");
+	}
 }

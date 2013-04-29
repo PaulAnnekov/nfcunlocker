@@ -4,9 +4,25 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Application;
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
+import android.app.admin.DevicePolicyManager;
+import android.content.Context;
+import android.util.Log;
 
 public class NFCApplication extends Application {
+	private static KeyguardLock mKeyguardLock;
+	static Context mContext;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		
+		mContext = this;
+	}
+	
 	static void runAsRoot(List<String> cmds) {
     	Process process;
 		try {
@@ -33,4 +49,14 @@ public class NFCApplication extends Application {
 			e.printStackTrace();
 		}
     }
+	
+	static KeyguardLock getKeyguardLock() {
+		if (mKeyguardLock == null) {
+			KeyguardManager keyguardManager = (KeyguardManager) mContext.getSystemService(Activity.KEYGUARD_SERVICE);  
+	        
+			mKeyguardLock = keyguardManager.newKeyguardLock("nfcunlocker");
+		}
+				
+		return mKeyguardLock;
+	}
 }
