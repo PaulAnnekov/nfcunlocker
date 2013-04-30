@@ -58,7 +58,7 @@
             </intent-filter>
         </receiver>
         
-        <service android:name=".FlagUnlock$FlagUpdateService"></service>
+        <service android:name=".KeyguardUnlock$KeyguardService"></service>
     </application>
 
 </manifest>

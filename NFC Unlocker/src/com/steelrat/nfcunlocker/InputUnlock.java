@@ -6,20 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.KeyguardManager;
-import android.app.Service;
-import android.app.KeyguardManager.KeyguardLock;
-import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.os.IBinder;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.WindowManager;
 
 public class InputUnlock extends UnlockMethod {
 	public InputUnlock(Activity activity, String password) {
@@ -82,7 +68,7 @@ public class InputUnlock extends UnlockMethod {
 		
 		// We can finish activity just after unlock.
 		if (event.equals("onCreate")) {             
-			mActivity.finish();
+			getActivity().finish();
 		}
 	}
 }

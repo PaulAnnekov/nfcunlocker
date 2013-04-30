@@ -1,22 +1,9 @@
 package com.steelrat.nfcunlocker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
-import android.app.KeyguardManager;
-import android.app.KeyguardManager.KeyguardLock;
-import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.view.WindowManager;
 
 public class DiscoveredActivity extends Activity {
 	UnlockMethod mUnlockMethod;

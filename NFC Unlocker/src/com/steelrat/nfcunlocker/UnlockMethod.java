@@ -4,7 +4,7 @@ import android.app.Activity;
 
 abstract class UnlockMethod {
 	private String mPassword;
-	Activity mActivity;
+	private Activity mActivity;
 	
 	public UnlockMethod(Activity activity, String password) {
 		mActivity = activity;
@@ -42,5 +42,13 @@ abstract class UnlockMethod {
 
 	protected void setPassword(String password) {
 		mPassword = password;
+	}
+
+	protected Activity getActivity() {
+		return mActivity;
+	}
+
+	protected void setmActivity(Activity activity) {
+		mActivity = activity;
 	}
 }

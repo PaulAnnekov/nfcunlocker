@@ -23,6 +23,10 @@ public class NFCApplication extends Application {
 		mContext = this;
 	}
 	
+	public static Context getContext() {
+		return mContext;
+	}
+	
 	static void runAsRoot(List<String> cmds) {
     	Process process;
 		try {
@@ -49,14 +53,4 @@ public class NFCApplication extends Application {
 			e.printStackTrace();
 		}
     }
-	
-	static KeyguardLock getKeyguardLock() {
-		if (mKeyguardLock == null) {
-			KeyguardManager keyguardManager = (KeyguardManager) mContext.getSystemService(Activity.KEYGUARD_SERVICE);  
-	        
-			mKeyguardLock = keyguardManager.newKeyguardLock("nfcunlocker");
-		}
-				
-		return mKeyguardLock;
-	}
 }
