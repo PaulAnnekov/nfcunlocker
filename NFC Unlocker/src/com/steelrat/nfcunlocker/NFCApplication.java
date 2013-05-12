@@ -1,19 +1,15 @@
 package com.steelrat.nfcunlocker;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.List;
+import com.steelrat.nfcunlocker.unlockmethods.FlagUnlock;
+import com.steelrat.nfcunlocker.unlockmethods.InputUnlock;
+import com.steelrat.nfcunlocker.unlockmethods.KeyguardUnlock;
+import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.KeyguardManager;
-import android.app.KeyguardManager.KeyguardLock;
-import android.app.admin.DevicePolicyManager;
 import android.content.Context;
-import android.util.Log;
 
 public class NFCApplication extends Application {
-	private static KeyguardLock mKeyguardLock;
 	static Context mContext;
 	
 	@Override
@@ -27,30 +23,17 @@ public class NFCApplication extends Application {
 		return mContext;
 	}
 	
-	static void runAsRoot(List<String> cmds) {
-    	Process process;
-		try {
-			process = Runtime.getRuntime().exec("su");
+	public static UnlockMethod getUnlockMethod(Activity activity, String methodName) {
+		UnlockMethod unlockMethod = null;
 		
-            DataOutputStream os = new DataOutputStream(process.getOutputStream());
-
-            if (cmds != null) {
-            	for (String tmpCmd : cmds) {
-            		os.writeBytes(tmpCmd+"\n");
-	            }
-            }         
-            
-            os.writeBytes("exit\n");
-            os.flush();
-            os.close();
-
-            process.waitFor();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (methodName.equals("FlagUnlock")) {
+			unlockMethod = new FlagUnlock(activity);
+		} else if (methodName.equals("InputUnlock")) {
+			unlockMethod = new InputUnlock(activity);
+		} else if (methodName.equals("KeyguardUnlock")) {
+			unlockMethod = new KeyguardUnlock(activity);
 		}
-    }
+		
+		return unlockMethod;
+	}
 }

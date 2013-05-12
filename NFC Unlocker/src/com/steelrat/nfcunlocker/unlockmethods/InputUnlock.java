@@ -1,4 +1,4 @@
-package com.steelrat.nfcunlocker;
+package com.steelrat.nfcunlocker.unlockmethods;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -8,12 +8,12 @@ import java.util.List;
 import android.app.Activity;
 
 public class InputUnlock extends UnlockMethod {
-	public InputUnlock(Activity activity, String password) {
-		super(activity, password);
+	public InputUnlock(Activity activity) {
+		super(activity);
 	}
 	
-	public void unlock() {
-		super.unlock();
+	public void unlock(String password) {
+		super.unlock(password);
 				
         List<String> cmds = new ArrayList<String>();
         cmds.add("input text \"" + getPassword() + "\"");
@@ -23,8 +23,8 @@ public class InputUnlock extends UnlockMethod {
 	}
 	
 	@Override
-	public void onEnable() {
-		super.onEnable();
+	public void onActivate() {
+		super.onActivate();
 	
 		// Just request Root access.
 		runAsRoot(null);

@@ -58,7 +58,7 @@
             </intent-filter>
         </receiver>
         
-        <service android:name=".KeyguardUnlock$KeyguardService"></service>
+        <service android:name=".unlockmethods.KeyguardUnlock$KeyguardService"></service>
     </application>
 
 </manifest>

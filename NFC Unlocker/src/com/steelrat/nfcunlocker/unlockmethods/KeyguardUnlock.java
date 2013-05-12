@@ -1,10 +1,9 @@
-package com.steelrat.nfcunlocker;
+package com.steelrat.nfcunlocker.unlockmethods;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.app.Service;
-import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,26 +26,26 @@ import android.os.IBinder;
  * @author SteelRat
  *
  */
-public class KeyguardUnlock extends UnlockMethod {
-	DevicePolicyManager mDPM;
+public class KeyguardUnlock extends DevicePolicyUnlockMethod {
 	static KeyguardLock mKeyguardLock;
-	public KeyguardUnlock(Activity activity, String password) {
-		super(activity, password);
-		
-		mDPM = (DevicePolicyManager) getActivity().getSystemService(Context.DEVICE_POLICY_SERVICE);
+	
+	public KeyguardUnlock(Activity activity) {
+		super(activity);
 	}
 	
-	public void unlock() {
-		super.unlock();
+	public void unlock(String password) {
+		super.unlock(password);
 			
-		// Clear password and disable keyguard.
-		mDPM.resetPassword("", 0);
-		getKeyguardLock(NFCApplication.getContext()).disableKeyguard();
+		Context context = getActivity();
 		
+		// Clear password and disable keyguard.
+		clearPassword();
+		getKeyguardLock(context).disableKeyguard();
+
 		// Launch service that will host broadcast receiver for screen off action.
-		Intent i = new Intent(getActivity(), KeyguardService.class);
-        i.putExtra("password", getPassword());
-        getActivity().startService(i);
+		Intent i = new Intent(context, KeyguardService.class);
+        i.putExtra("password", password);
+        context.startService(i);
 	}
 	
 	@Override
@@ -59,7 +58,16 @@ public class KeyguardUnlock extends UnlockMethod {
 		}
 	}
 	
-	static KeyguardLock getKeyguardLock(Context context) {
+	@Override
+	public void onDeactivate() {
+		super.onDeactivate();
+
+		// Stop service that may running.
+		Intent i = new Intent(getActivity(), KeyguardService.class);
+		getActivity().stopService(i);
+	}
+	
+	private static KeyguardLock getKeyguardLock(Context context) {
 		if (mKeyguardLock == null) {
 			KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Activity.KEYGUARD_SERVICE);  
 	        
@@ -74,22 +82,25 @@ public class KeyguardUnlock extends UnlockMethod {
 	    boolean mIsRegistered = false;
 	    
 	    @Override
-	    public int onStartCommand(Intent intent, int flags, int startId) {
-	    	// Create new broadcast receiver for screen off action.
-	    	if (!mIsRegistered) {
-	    		mReceiver = new ScreenReceiver(intent.getExtras().getString("password"));
-	    		IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+		public int onStartCommand(Intent intent, int flags, int startId) {
+			// Create new broadcast receiver for screen off action.
+			if (!mIsRegistered) {
+				mReceiver = new ScreenReceiver(intent.getExtras().getString("password"));
+				IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 		        registerReceiver(mReceiver, filter);
-	    	}
-	    	
-	    	return super.onStartCommand(intent, flags, startId);
-	    }
+		        mIsRegistered = true;
+			}
+
+			return super.onStartCommand(intent, flags, startId);
+		}
 	    
 	    @Override
 	    public void onDestroy() {
 	    	super.onDestroy();
-	    	
+
 	    	if (mIsRegistered) {
+	    		// Call onReceive before destroy to restore keyguard state.
+	    		mReceiver.onReceive(this, null);
 	    		unregisterReceiver(mReceiver);
 	    	}
 	    }
@@ -103,11 +114,9 @@ public class KeyguardUnlock extends UnlockMethod {
 			
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				DevicePolicyManager DPM = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);               
-				
 				// Re-enable keyguard and set password back.
-				getKeyguardLock(NFCApplication.getContext()).reenableKeyguard();
-				DPM.resetPassword(mPassword, 0);
+				getKeyguardLock(context).reenableKeyguard();
+				KeyguardUnlock.setPassword(context, mPassword);
 			}
 		}
 		

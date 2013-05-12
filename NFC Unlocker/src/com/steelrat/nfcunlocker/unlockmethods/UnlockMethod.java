@@ -1,32 +1,32 @@
-package com.steelrat.nfcunlocker;
+package com.steelrat.nfcunlocker.unlockmethods;
 
 import android.app.Activity;
 
-abstract class UnlockMethod {
+public abstract class UnlockMethod {
 	private String mPassword;
 	private Activity mActivity;
 	
-	public UnlockMethod(Activity activity, String password) {
+	public UnlockMethod(Activity activity) {
 		mActivity = activity;
+	}
+	
+	public void unlock(String password) {
 		mPassword = password;
 	}
 	
-	public void unlock() {
+	/**
+	 * Called on unlock method activation.
+	 */
+	public void onActivate() {
 		
 	}
 	
-	public void onEnable() {
+	/**
+	 * Called on unlock method deactivation.
+	 */
+	public void onDeactivate() {
 		
 	}
-	
-	public void onDisable() {
-		
-	}
-	
-		
-	/*private boolean isActiveAdmin() {
-		return mDPM.isAdminActive(mAppDeviceAdmin);
-	}*/
 	
 	/**
 	 * Called by activity on some event methods.
@@ -48,7 +48,7 @@ abstract class UnlockMethod {
 		return mActivity;
 	}
 
-	protected void setmActivity(Activity activity) {
+	protected void setActivity(Activity activity) {
 		mActivity = activity;
 	}
 }

@@ -14,10 +14,6 @@ public class MainActivity extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		// TODO: don't call it if first time privileges was successful granted. Let's hope, that 
-		// user checked them as persistent.
-		NFCApplication.runAsRoot(null);
 	}
 
 	@Override

@@ -1,8 +1,11 @@
 package com.steelrat.nfcunlocker;
 
+import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
+
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.SharedPreferences;
 
 public class DiscoveredActivity extends Activity {
@@ -11,62 +14,27 @@ public class DiscoveredActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-         
+        
+		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
+		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String password = sharedPref.getString("password", "");
-		
-        mUnlockMethod = new FlagUnlock(this, password);
-        mUnlockMethod.unlock();
-		
+        String password = sharedPref.getString("password", "");		
+        mUnlockMethod = NFCApplication.getUnlockMethod(this, sharedPref.getString("unlock_method", ""));
+				  
+		// Finish activity if the screen is not locked, unlock method is not set or the password is empty.
+		if (!keyguardManager.inKeyguardRestrictedInputMode() || mUnlockMethod == null || password.length() == 0) {
+			finish();
+        	return;
+		}
+        
+        mUnlockMethod.unlock(password);	
 		mUnlockMethod.onActivityEvent("onCreate");
-		
-		//Get the window from the context
-        //WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-		/*DevicePolicyManager DPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        DPM.resetPassword("", 0);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        
-        Intent i = new Intent(this, UpdateService.class);
-        startService(i);*/
-        
-        /*DevicePolicyManager DPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        DPM.resetPassword("", 0);
-        keyguard = NFCApplication.getKeyguardLock();
-        keyguard.disableKeyguard();
-        
-        Intent i = new Intent(this, UpdateService.class);
-        startService(i);*/
-        
-        /*// Get password from settings.
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String password = sharedPref.getString("password", "");
-        
-        // Check if screen is locked now + password set by user.
-        if (keyguardManager.inKeyguardRestrictedInputMode() && !syncConnPref.isEmpty()) {
-        	Log.i("onCreate", "Keyguard enabled");
-        	
-        	List<String> cmds = new ArrayList<String>();
-            cmds.add("input text \"" + syncConnPref + "\"");
-            cmds.add("input keyevent 66");
-            
-            NFCApplication.runAsRoot(cmds);
-        } else {
-        	Log.i("onCreate", "Keyguard disabled");
-        }*/
-        
-        //finish();
     }
 	
 	@Override
 	public void onAttachedToWindow() {	
-		// TODO Auto-generated method stub
 		super.onAttachedToWindow();
 	
-		/*SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String password = sharedPref.getString("password", "");
-		
-		DevicePolicyManager DPM = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);               
-        DPM.resetPassword(password, 0);*/
 		mUnlockMethod.onActivityEvent("onAttachedToWindow");
 	}
 	
@@ -74,6 +42,8 @@ public class DiscoveredActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
         
-        mUnlockMethod.onActivityEvent("onDestroy");
+		if (mUnlockMethod != null) {
+			mUnlockMethod.onActivityEvent("onDestroy");
+		}
 	}
 }

@@ -15,13 +15,12 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.List;
 
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -44,6 +43,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 	private static final boolean ALWAYS_SIMPLE_PREFS = false;
 	ComponentName mAppDeviceAdmin;
 	DevicePolicyManager mDPM;
+	UnlockMethod mPrevUnlockMethod;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 		mAppDeviceAdmin = new ComponentName(this, AppDeviceAdminReceiver.class);
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		mPrevUnlockMethod = NFCApplication.getUnlockMethod(this, prefs.getString("unlock_method", ""));
 		prefs.registerOnSharedPreferenceChangeListener(this);
 	}
 	
@@ -69,12 +70,14 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 
             @Override
             public boolean onPreferenceClick(Preference preference) {
-            	// Launch the activity to have the user enable our admin.
-                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mAppDeviceAdmin);
-                intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                        getString(R.string.device_admin_description));
-                startActivityForResult(intent, 1);
+            	if (!isActiveAdmin()) {
+            		// Launch the activity to have the user enable our admin.
+                    Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                    intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, mAppDeviceAdmin);
+                    intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                            getString(R.string.device_admin_description));
+                    startActivityForResult(intent, 1);
+            	}
                 
             	return false;
             }
@@ -183,12 +186,21 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (isActiveAdmin()) {
-			Log.i("onSharedPreferenceChanged", "isActiveAdmin");
-			boolean success = mDPM.resetPassword(sharedPreferences.getString(key, ""), 0);
-			Log.i("onSharedPreferenceChanged", "result=" + (success ? "yes" : "no"));
-		} else {
-			Log.i("onSharedPreferenceChanged", "device admin not active");
+		if (key.equals("unlock_method")) {
+			UnlockMethod unlockMethod = NFCApplication.getUnlockMethod(this, sharedPreferences.getString("unlock_method", ""));
+			
+			// Deactivate previous unlock method.
+			if (mPrevUnlockMethod != null) {
+				mPrevUnlockMethod.onDeactivate();
+			}
+			
+			unlockMethod.onActivate();
+			
+			// Set previous method to current. This is needed if user will change unlock methods more then once without leaving SettingsActivity.
+			mPrevUnlockMethod = unlockMethod;
+		} else if (key.equals("password") && isActiveAdmin()) {
+			// Set screen lock password.
+			mDPM.resetPassword(sharedPreferences.getString(key, ""), 0);
 		}
 	}
 }

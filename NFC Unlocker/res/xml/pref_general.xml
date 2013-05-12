@@ -7,5 +7,12 @@
         android:singleLine="true"
         android:inputType="textPassword"
         android:title="@string/pref_title_password" />
+    
+    <ListPreference
+        android:key="unlock_method"
+        android:title="@string/pref_title_unlock_method"
+        android:dialogTitle="@string/pref_title_unlock_method"
+        android:entries="@array/pref_unlock_method_entries"
+        android:entryValues="@array/pref_unlock_method_values" />
 
 </PreferenceScreen>

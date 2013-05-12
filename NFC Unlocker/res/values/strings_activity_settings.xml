@@ -5,11 +5,24 @@
     <!-- Strings related to Settings -->
 
 
-    <!-- Example General settings -->
+    <!-- General settings -->
     <string name="pref_header_general">General</string>
     <string name="pref_title_password">Password</string>
+    <string name="pref_title_unlock_method">Unlock Method</string>    
 
     <!-- Settings for About -->
     <string name="pref_header_about">Notifications</string>
 
+    <string-array name="pref_unlock_method_entries">
+	   <item>Flag</item>
+	   <item>Input</item>
+	   <item>KeyguardLock</item>
+	</string-array>
+	 
+	<string-array name="pref_unlock_method_values">
+	   <item>FlagUnlock</item>
+	   <item>InputUnlock</item>
+	   <item>KeyguardUnlock</item>
+	</string-array>
+    
 </resources>
