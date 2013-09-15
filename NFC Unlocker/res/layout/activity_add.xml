@@ -22,4 +22,15 @@
         <requestFocus />
     </EditText>
 
+    <TextView
+        android:id="@+id/tagIdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tagNameEdit"
+        android:layout_below="@+id/tagNameEdit"
+        android:text="@string/tag_id_waiting"
+        android:focusable="true"
+    	android:focusableInTouchMode="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

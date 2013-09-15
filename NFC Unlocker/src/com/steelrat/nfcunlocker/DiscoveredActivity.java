@@ -16,7 +16,6 @@ public class DiscoveredActivity extends Activity {
 		super.onCreate(savedInstanceState);
         
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
-		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String password = sharedPref.getString("password", "");		
         mUnlockMethod = NFCApplication.getUnlockMethod(this, sharedPref.getString("unlock_method", ""));

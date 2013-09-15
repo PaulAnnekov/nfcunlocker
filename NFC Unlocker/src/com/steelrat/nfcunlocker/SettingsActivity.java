@@ -15,6 +15,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
@@ -166,12 +167,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 			case android.R.id.home:
-				Intent intent = new Intent(this, MainActivity.class);
-				intent.addFlags(
-	                    Intent.FLAG_ACTIVITY_CLEAR_TOP |
-	                    Intent.FLAG_ACTIVITY_NEW_TASK);
-	            startActivity(intent);
-	            finish();
+				NavUtils.navigateUpFromSameTask(this);
 				break;
 			default:
 				return super.onOptionsItemSelected(item);

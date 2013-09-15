@@ -9,6 +9,7 @@ Android API does not support unlock of secured lock screen. I have made some wor
 
 Supported lock screen security options
 --------------------------------------
+
 * PIN
 * Password
 
@@ -26,6 +27,22 @@ Developed By
 ------------
 
 * Paul Annekov (https://github.com/PaulAnnekov)
+
+
+
+Branching model
+---------------
+
+Similar to [this] (http://nvie.com/posts/a-successful-git-branching-model) branching model but with only **master**,
+**develop** and **feature branches**.
+
+Develop main functionality in **develop** branch.
+
+For new experimental features create separate branch.
+
+Merge to **develop** from feature branch when you complete it.
+
+Merge to **master** from **develop** branch on release and tag it with version number.
 
 
 

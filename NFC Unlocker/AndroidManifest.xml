@@ -6,15 +6,20 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.NFC" />
 
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
     <application
         android:name="com.steelrat.nfcunlocker.NFCApplication"
-        android:icon="@drawable/ic_launcher"
+        android:allowBackup="true"
+        android:icon="@drawable/launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock" >
         <activity
@@ -24,8 +29,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -39,11 +43,21 @@
         </activity>
         <activity
             android:name="com.steelrat.nfcunlocker.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.steelrat.nfcunlocker.MainActivity" >
+            <!-- FALLBACK: Parent activity meta-data to support 4.0 and lower -->
+	        <meta-data
+	            android:name="android.support.PARENT_ACTIVITY"
+	            android:value="com.steelrat.nfcunlocker.AddActivity" />
         </activity>
         <activity
             android:name="com.steelrat.nfcunlocker.AddActivity"
-            android:label="@string/title_activity_add" >
+            android:label="@string/title_activity_add"
+            android:parentActivityName="com.steelrat.nfcunlocker.MainActivity" >
+            <!-- FALLBACK: Parent activity meta-data to support 4.0 and lower -->
+	        <meta-data
+	            android:name="android.support.PARENT_ACTIVITY"
+	            android:value="com.steelrat.nfcunlocker.MainActivity" />
         </activity>
 
         <receiver
@@ -57,8 +71,9 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
-        
-        <service android:name=".unlockmethods.KeyguardUnlock$KeyguardService"></service>
+
+        <service android:name=".unlockmethods.KeyguardUnlock$KeyguardService" >
+        </service>
     </application>
 
 </manifest>
