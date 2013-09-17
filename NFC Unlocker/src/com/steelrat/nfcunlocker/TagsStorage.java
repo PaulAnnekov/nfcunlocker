@@ -1,7 +1,10 @@
 package com.steelrat.nfcunlocker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -17,14 +20,19 @@ public class TagsStorage {
 	}
 	
 	public void addTag(String name, byte[] id) {
-		mEditor.putString(name, bytesToHex(id));
+		mEditor.putString(bytesToHex(id), name);
 		mEditor.commit();
 	}
 	
-	public Map<String, String> getAllTags() {
-		Map<String, String> tags = (Map<String, String>) mSettings.getAll();
+	public List<String> getAllTags() {
+		Map<String, String> tagsMap = (HashMap<String, String>) mSettings.getAll();
 		
-		return tags;
+		List<String> tagsList = new ArrayList<String>();
+		for(Entry<String, String> entry : tagsMap.entrySet()) {
+			tagsList.add(entry.getValue() + " (" + entry.getKey() + ")");
+		}
+		
+		return tagsList;
 	}
 	
 	public static String bytesToHex(byte[] bytes) {

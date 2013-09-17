@@ -8,6 +8,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_add">Add Tag</string>
     <string name="action_save">Save</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
     <string name="title_activity_add">Add Tag</string>
     <string name="tag_name">Tag Name</string>
     <string name="tag_id_waiting">Waiting for tag scan…</string>
