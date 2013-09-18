@@ -2,6 +2,7 @@ package com.steelrat.nfcunlocker;
 
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
 
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
@@ -15,6 +16,14 @@ public class DiscoveredActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         
+		// Check tag existence.
+		TagsStorage tagsStorage = new TagsStorage(this);
+		String id = TagsStorage.bytesToHex(getIntent().getByteArrayExtra(NfcAdapter.EXTRA_ID));
+		if (!tagsStorage.isExists(id)) {
+			finish();
+			return;
+		}
+		
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String password = sharedPref.getString("password", "");		
@@ -23,7 +32,7 @@ public class DiscoveredActivity extends Activity {
 		// Finish activity if the screen is not locked, unlock method is not set or the password is empty.
 		if (!keyguardManager.inKeyguardRestrictedInputMode() || mUnlockMethod == null || password.length() == 0) {
 			finish();
-        	return;
+			return;
 		}
         
         mUnlockMethod.unlock(password);	

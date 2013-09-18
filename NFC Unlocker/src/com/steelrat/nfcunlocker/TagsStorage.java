@@ -44,6 +44,10 @@ public class TagsStorage {
 		mEditor.commit();
 	}
 	
+	public boolean isExists(String id) {
+		return mSettings.getString(id, null) != null;
+	}
+	
 	public static String bytesToHex(byte[] bytes) {
 		final char[] hexArray = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 		
