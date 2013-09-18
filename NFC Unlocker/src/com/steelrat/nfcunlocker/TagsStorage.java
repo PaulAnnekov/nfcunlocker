@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.widget.SimpleAdapter;
 
 public class TagsStorage {
 	SharedPreferences mSettings;
@@ -24,15 +25,23 @@ public class TagsStorage {
 		mEditor.commit();
 	}
 	
-	public List<String> getAllTags() {
-		Map<String, String> tagsMap = (HashMap<String, String>) mSettings.getAll();
+	public ArrayList<Map<String, String>> getAllTags() {
+		Map<String, String> tagsMap = (Map<String, String>) mSettings.getAll();
 		
-		List<String> tagsList = new ArrayList<String>();
+		ArrayList<Map<String, String>> tagsList = new ArrayList<Map<String, String>>();
 		for(Entry<String, String> entry : tagsMap.entrySet()) {
-			tagsList.add(entry.getValue() + " (" + entry.getKey() + ")");
+			HashMap<String, String> item = new HashMap<String, String>();
+		    item.put("id", entry.getKey());
+		    item.put("name", entry.getValue());
+			tagsList.add(item);
 		}
 		
 		return tagsList;
+	}
+	
+	public void removeTag(String id) {
+		mEditor.remove(id);
+		mEditor.commit();
 	}
 	
 	public static String bytesToHex(byte[] bytes) {
