@@ -5,5 +5,7 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="libs/acra-4.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/RootTools2.6.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

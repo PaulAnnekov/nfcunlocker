@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.acra.ACRA;
+
 import android.app.Activity;
 
 public class InputUnlock extends UnlockMethod {
@@ -51,14 +53,14 @@ public class InputUnlock extends UnlockMethod {
             os.writeBytes("exit\n");
             os.flush();
             os.close();
-
+            
             process.waitFor();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ACRA.getErrorReporter().handleException(e);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ACRA.getErrorReporter().handleException(e);
 		}
 	}
 	

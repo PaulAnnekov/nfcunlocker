@@ -83,9 +83,6 @@ public class MainActivity extends SherlockListActivity {
 	    Map<String, String> tag = (Map<String, String>) mListAdapter.getItem(info.position);
 
 	    switch (item.getItemId()) {
-	        case R.id.action_edit:
-	        	Toast.makeText(this, tag.get("id"), Toast.LENGTH_LONG).show();
-	            return true;
 	        case R.id.action_delete:
 	        	mTagsStorage.removeTag(tag.get("id"));
 	        	mTags.remove(tag);
