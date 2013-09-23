@@ -16,9 +16,10 @@ public abstract class UnlockMethod {
 	
 	/**
 	 * Called on unlock method activation.
+	 * @return boolean Activation result (success or fail).
 	 */
-	public void onActivate() {
-		
+	public boolean onActivate() {
+		return true;
 	}
 	
 	/**

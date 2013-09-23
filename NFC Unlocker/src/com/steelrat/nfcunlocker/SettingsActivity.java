@@ -101,7 +101,6 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 		addPreferencesFromResource(R.xml.pref_general);
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public boolean onIsMultiPane() {
 		return isXLargeTablet(this) && !isSimplePreferences(this);
@@ -128,7 +127,6 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 				|| !isXLargeTablet(context);
 	}
 	
-	/** {@inheritDoc} */
 	@Override
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void onBuildHeaders(List<Header> target) {
@@ -183,17 +181,21 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("unlock_method")) {
-			UnlockMethod unlockMethod = NFCApplication.getUnlockMethod(this, sharedPreferences.getString("unlock_method", ""));
+			UnlockMethod unlockMethod = NFCApplication.getUnlockMethod(this, sharedPreferences.getString(key, ""));
 			
 			// Deactivate previous unlock method.
 			if (mPrevUnlockMethod != null) {
 				mPrevUnlockMethod.onDeactivate();
 			}
 			
-			unlockMethod.onActivate();
-			
-			// Set previous method to current. This is needed if user will change unlock methods more then once without leaving SettingsActivity.
-			mPrevUnlockMethod = unlockMethod;
+			if (unlockMethod.onActivate()) {
+				// Set previous method to current. This is needed if user will change 
+				// unlock methods more then once without leaving SettingsActivity.
+				mPrevUnlockMethod = unlockMethod;
+			} else {
+				// Reactivate previous method on error.
+				mPrevUnlockMethod.onActivate();
+			}		
 		} else if (key.equals("password") && isActiveAdmin()) {
 			// Set screen lock password.
 			mDPM.resetPassword(sharedPreferences.getString(key, ""), 0);

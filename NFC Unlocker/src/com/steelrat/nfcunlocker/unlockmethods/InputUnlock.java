@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.acra.ACRA;
 
+import com.stericson.RootTools.RootTools;
+
 import android.app.Activity;
 
 public class InputUnlock extends UnlockMethod {
@@ -25,11 +27,10 @@ public class InputUnlock extends UnlockMethod {
 	}
 	
 	@Override
-	public void onActivate() {
+	public boolean onActivate() {
 		super.onActivate();
 	
-		// Just request Root access.
-		runAsRoot(null);
+		return RootTools.isAccessGiven();
 	}
 	
 	/**
