@@ -1,6 +1,7 @@
 package com.steelrat.nfcunlocker;
 
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
+import com.steelrat.nfcunlocker.unlockmethods.UnlockMethodFactory;
 
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ public class DiscoveredActivity extends Activity {
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String password = sharedPref.getString("password", "");		
-        mUnlockMethod = NFCApplication.getUnlockMethod(this, sharedPref.getString("unlock_method", ""));
+        mUnlockMethod = UnlockMethodFactory.getUnlockMethod(this, sharedPref.getString("unlock_method", ""));
 				  
 		// Finish activity if the screen is not locked, unlock method is not set or the password is empty.
 		if (!keyguardManager.inKeyguardRestrictedInputMode() || mUnlockMethod == null || password.length() == 0) {

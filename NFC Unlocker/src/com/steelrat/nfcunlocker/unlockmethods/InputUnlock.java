@@ -7,9 +7,12 @@ import java.util.List;
 
 import org.acra.ACRA;
 
+import com.steelrat.nfcunlocker.R;
 import com.stericson.RootTools.RootTools;
 
 import android.app.Activity;
+import android.content.Context;
+import android.widget.Toast;
 
 public class InputUnlock extends UnlockMethod {
 	public InputUnlock(Activity activity) {
@@ -30,7 +33,13 @@ public class InputUnlock extends UnlockMethod {
 	public boolean onActivate() {
 		super.onActivate();
 	
-		return RootTools.isAccessGiven();
+		boolean isRootAccess = RootTools.isAccessGiven();
+		if (!isRootAccess) {
+			Context c = getActivity();
+			Toast.makeText(c, c.getString(R.string.error_root_access), Toast.LENGTH_LONG).show();
+		}
+		
+		return isRootAccess;
 	}
 	
 	/**

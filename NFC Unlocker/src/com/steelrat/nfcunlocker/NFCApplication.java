@@ -32,18 +32,4 @@ public class NFCApplication extends Application {
 	public static Context getContext() {
 		return mContext;
 	}
-	
-	public static UnlockMethod getUnlockMethod(Activity activity, String methodName) {
-		UnlockMethod unlockMethod = null;
-		
-		if (methodName.equals("FlagUnlock")) {
-			unlockMethod = new FlagUnlock(activity);
-		} else if (methodName.equals("InputUnlock")) {
-			unlockMethod = new InputUnlock(activity);
-		} else if (methodName.equals("KeyguardUnlock")) {
-			unlockMethod = new KeyguardUnlock(activity);
-		}
-		
-		return unlockMethod;
-	}
 }

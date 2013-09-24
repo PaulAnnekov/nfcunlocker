@@ -22,6 +22,7 @@ import java.util.List;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
+import com.steelrat.nfcunlocker.unlockmethods.UnlockMethodFactory;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -56,7 +57,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 		mAppDeviceAdmin = new ComponentName(this, AppDeviceAdminReceiver.class);
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		mPrevUnlockMethod = NFCApplication.getUnlockMethod(this, prefs.getString("unlock_method", ""));
+		mPrevUnlockMethod = UnlockMethodFactory.getUnlockMethod(this, prefs.getString("unlock_method", ""));
 		prefs.registerOnSharedPreferenceChangeListener(this);
 	}
 	
@@ -181,7 +182,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements OnSh
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("unlock_method")) {
-			UnlockMethod unlockMethod = NFCApplication.getUnlockMethod(this, sharedPreferences.getString(key, ""));
+			UnlockMethod unlockMethod = UnlockMethodFactory.getUnlockMethod(this, sharedPreferences.getString(key, ""));
 			
 			// Deactivate previous unlock method.
 			if (mPrevUnlockMethod != null) {

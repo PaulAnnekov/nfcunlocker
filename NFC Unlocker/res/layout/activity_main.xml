@@ -8,4 +8,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
+    <ListView android:id="@android:id/list"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:drawSelectorOnTop="false" />
+
+     <TextView
+         android:id="@+id/error"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerInParent="true"
+         android:text="@string/error_nfc_not_supported"
+         android:textAppearance="?android:attr/textAppearanceMedium"
+         android:visibility="gone" />
+    
 </RelativeLayout>

@@ -8,16 +8,20 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class MainActivity extends SherlockListActivity {
 	TagsStorage mTagsStorage;
@@ -27,6 +31,14 @@ public class MainActivity extends SherlockListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if (!isNfcSupported()) {
+			findViewById(android.R.id.list).setVisibility(View.GONE);
+			findViewById(R.id.error).setVisibility(View.VISIBLE);
+			return;
+		}
+		
+		checkNFCState();
 		
 		registerForContextMenu(getListView());
 		
@@ -91,5 +103,38 @@ public class MainActivity extends SherlockListActivity {
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
+	}
+	
+	private boolean isNfcSupported() {
+		NfcAdapter adapter = NfcAdapter.getDefaultAdapter(this);
+
+		return adapter != null;
+	}
+	
+	private void checkNFCState() {
+		 NfcAdapter adapter = NfcAdapter.getDefaultAdapter(this);
+		 if (adapter == null) {
+			 return;
+		 }
+			 
+		 if (!adapter.isEnabled()) {
+			 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			 builder.setMessage(R.string.nfc_disabled_message)
+			        .setTitle(R.string.nfc_disabled_title)
+			        .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (Build.VERSION.SDK_INT >= 16) {	
+					            startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
+					        } else {
+					            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+					        }
+						}
+					})
+					.setNegativeButton(android.R.string.cancel, null);
+			 AlertDialog dialog = builder.create();
+			 dialog.show();
+		 } 
 	}
 }
