@@ -9,11 +9,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -27,10 +25,17 @@ public class MainActivity extends SherlockListActivity {
 	TagsStorage mTagsStorage;
 	SimpleAdapter mListAdapter;
 	ArrayList<Map<String, String>> mTags;
+	AlertDialog mDialog;
+	boolean mIsDialog = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// Load state.
+		if (savedInstanceState != null) {
+			mIsDialog = savedInstanceState.getBoolean("isDialog", true);
+		}
 		
 		if (!isNfcSupported()) {
 			findViewById(android.R.id.list).setVisibility(View.GONE);
@@ -38,8 +43,9 @@ public class MainActivity extends SherlockListActivity {
 			return;
 		}
 		
-		checkNFCState();
-		
+		if (mIsDialog)
+			checkNFCState();
+			
 		registerForContextMenu(getListView());
 		
 		mTagsStorage = new TagsStorage(this);
@@ -111,6 +117,21 @@ public class MainActivity extends SherlockListActivity {
 		return adapter != null;
 	}
 	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		if (mDialog != null)
+			mDialog.dismiss();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		outState.putBoolean("isDialog", mDialog != null && mDialog.isShowing());
+	}
+	
 	private void checkNFCState() {
 		 NfcAdapter adapter = NfcAdapter.getDefaultAdapter(this);
 		 if (adapter == null) {
@@ -133,8 +154,8 @@ public class MainActivity extends SherlockListActivity {
 						}
 					})
 					.setNegativeButton(android.R.string.cancel, null);
-			 AlertDialog dialog = builder.create();
-			 dialog.show();
+			 mDialog = builder.create();
+			 mDialog.show();
 		 } 
 	}
 }
