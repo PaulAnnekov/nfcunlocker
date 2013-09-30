@@ -21,4 +21,6 @@
 	<string name="nfc_disabled_title">NFC service disabled</string>
 	<string name="nfc_disabled_message">Enable NFC service before using application.</string>
 	<string name="enable">Enable</string>
+	<string name="version">version: %s</string>
+	<string name="github"><a href="https://github.com/PaulAnnekov/nfcunlocker">Github</a></string>
 </resources>

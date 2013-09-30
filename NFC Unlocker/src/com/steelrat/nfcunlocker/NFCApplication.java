@@ -8,6 +8,8 @@ import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 import org.acra.*;
 import org.acra.annotation.*;
@@ -31,5 +33,20 @@ public class NFCApplication extends Application {
 	
 	public static Context getContext() {
 		return mContext;
+	}
+	
+	public static String getVersion() {	
+		String version = "";
+		
+		try {
+			PackageInfo pInfo;
+			pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+			version = pInfo.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			ACRA.getErrorReporter().handleException(e);
+		} 
+		
+		return version;
 	}
 }

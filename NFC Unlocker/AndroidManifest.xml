@@ -44,12 +44,11 @@
         </activity>
         <activity
             android:name="com.steelrat.nfcunlocker.settingsactivity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName="com.steelrat.nfcunlocker.MainActivity" >
-            <!-- FALLBACK: Parent activity meta-data to support 4.0 and lower -->
-	        <meta-data
-	            android:name="android.support.PARENT_ACTIVITY"
-	            android:value="com.steelrat.nfcunlocker.AddActivity" />
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.steelrat.nfcunlocker.settingsactivity.SettingsActivityOA"
+            android:label="@string/title_activity_settings" >
         </activity>
         <activity
             android:name="com.steelrat.nfcunlocker.AddActivity"

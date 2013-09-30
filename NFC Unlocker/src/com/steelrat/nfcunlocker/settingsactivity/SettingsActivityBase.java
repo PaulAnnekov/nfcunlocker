@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NavUtils;
+import android.text.method.LinkMovementMethod;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.steelrat.nfcunlocker.AppDeviceAdminReceiver;
+import com.steelrat.nfcunlocker.NFCApplication;
 import com.steelrat.nfcunlocker.R;
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethodFactory;
@@ -47,7 +51,9 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
+			// We use "finish" because PreferenceActivity creates separate
+			// activities for each preference screen (API <10 && single pane).
+			finish();
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -71,8 +77,7 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 
 	protected void enableAdmin() {
 		if (!isActiveAdmin()) {
-			// Launch the activity to have the user enable our
-			// admin.
+			// Launch the activity to have the user enable our admin.
 			Intent intent = new Intent(
 					DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 			intent.putExtra(
@@ -96,8 +101,8 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 
 		if (unlockMethod.onActivate()) {
 			// Set previous method to current. This is needed if user will
-			// change
-			// unlock methods more then once without leaving SettingsActivity.
+			// change unlock methods more then once without leaving 
+			// SettingsActivity.
 			mPrevUnlockMethod = unlockMethod;
 		} else {
 			// Reactivate previous method on error.
@@ -109,5 +114,27 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 		}
 		
 		return true;
+	}
+	
+	protected void updateAbout(ViewGroup aboutView) {
+		String version = NFCApplication.getVersion();
+		
+		TextView versionText = (TextView) aboutView.findViewById(R.id.versionText);
+		versionText.setText(String.format(versionText.getText().toString(), version));
+		
+		TextView githubText = (TextView) aboutView.findViewById(R.id.githubText);
+		githubText.setMovementMethod(LinkMovementMethod.getInstance());
+	}
+	
+	public static Intent getIntent(Context c) {
+		Class<? extends SettingsActivityBase> intentClass;
+		if (Build.VERSION.SDK_INT<Build.VERSION_CODES.HONEYCOMB) {
+			intentClass = SettingsActivityOA.class;
+		}
+        else {
+        	intentClass = SettingsActivity.class;
+        }
+		
+		return new Intent(c, intentClass);
 	}
 }

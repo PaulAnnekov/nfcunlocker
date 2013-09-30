@@ -8,6 +8,7 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.steelrat.nfcunlocker.settingsactivity.SettingsActivity;
+import com.steelrat.nfcunlocker.settingsactivity.SettingsActivityBase;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -38,9 +39,11 @@ public class MainActivity extends SherlockListActivity {
 			mIsDialog = savedInstanceState.getBoolean("isDialog", true);
 		}
 		
+		setContentView(R.layout.activity_main);
+		
 		if (!isNfcSupported()) {
 			findViewById(android.R.id.list).setVisibility(View.GONE);
-			findViewById(R.id.error).setVisibility(View.VISIBLE);
+			findViewById(R.id.errorText).setVisibility(View.VISIBLE);
 			return;
 		}
 		
@@ -71,8 +74,7 @@ public class MainActivity extends SherlockListActivity {
 				startActivity(intent);
 				break;
 			case R.id.action_settings:
-				intent = new Intent(this, SettingsActivity.class);
-				startActivity(intent);
+				startActivity(SettingsActivityBase.getIntent(this));
 				break;
 			default:
 				return super.onOptionsItemSelected(item);

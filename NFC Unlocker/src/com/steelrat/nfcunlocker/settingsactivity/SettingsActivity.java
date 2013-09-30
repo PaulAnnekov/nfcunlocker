@@ -7,6 +7,9 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -45,6 +48,19 @@ public class SettingsActivity extends SettingsActivityBase {
 					return false;
 				}
 			});
+		}
+	}
+	
+	public static class AboutPreferenceFragment extends PreferenceFragment {
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.settings_about, container, false);
+			
+			SettingsActivity activity = (SettingsActivity) getActivity();
+			activity.updateAbout(rootView);
+			
+			return rootView;
 		}
 	}
 }

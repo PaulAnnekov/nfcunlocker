@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference 
+        android:title="@string/pref_header_general" >
+        <intent 
+            android:targetPackage="com.steelrat.nfcunlocker"
+            android:targetClass="com.steelrat.nfcunlocker.settingsactivity.SettingsActivityOA"
+            android:action="com.steelrat.nfcunlocker.PREFS_GENERAL" />
+    </Preference>
+    <Preference 
+        android:title="@string/pref_header_about" >
+        <intent 
+            android:targetPackage="com.steelrat.nfcunlocker"
+            android:targetClass="com.steelrat.nfcunlocker.settingsactivity.SettingsActivityOA"
+            android:action="com.steelrat.nfcunlocker.PREFS_ABOUT" />
+    </Preference>
+</PreferenceScreen>
