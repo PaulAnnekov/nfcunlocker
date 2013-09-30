@@ -1,6 +1,7 @@
 package com.steelrat.nfcunlocker.settingsactivity;
 
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -45,7 +46,7 @@ public class SettingsActivityOA extends SettingsActivityBase {
 					@Override
 					public boolean onPreferenceClick(Preference preference) {
 						enableAdmin();
-
+						
 						return false;
 					}
 				});

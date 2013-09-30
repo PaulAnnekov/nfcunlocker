@@ -29,7 +29,8 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 	UnlockMethod mPrevUnlockMethod;
 	SharedPreferences mPreferences;
 	Editor mEditor;
-
+	private static final int ADMIN_REQUEST_CODE = 1;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,6 +76,15 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 		}
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ADMIN_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				
+			}
+		}
+	}
+	
 	protected void enableAdmin() {
 		if (!isActiveAdmin()) {
 			// Launch the activity to have the user enable our admin.
@@ -86,7 +96,7 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 			intent.putExtra(
 					DevicePolicyManager.EXTRA_ADD_EXPLANATION,
 					getString(R.string.device_admin_description));
-			startActivityForResult(intent, 1);
+			startActivityForResult(intent, ADMIN_REQUEST_CODE);
 		}
 	}
 	
