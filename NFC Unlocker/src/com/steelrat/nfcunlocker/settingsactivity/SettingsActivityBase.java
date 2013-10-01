@@ -10,9 +10,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -104,7 +102,7 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 	
 	protected boolean changeUnlockMethod(String name) {
 		UnlockMethod unlockMethod = UnlockMethodFactory.getUnlockMethod(this,
-				mPreferences.getString(name, ""));
+				name);
 
 		// Deactivate previous unlock method.
 		if (mPrevUnlockMethod != null) {

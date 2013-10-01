@@ -29,7 +29,6 @@ public class FlagUnlock extends DevicePolicyUnlockMethod {
 	
 	public void unlock(String password) {
 		super.unlock(password);
-
 		clearPassword();
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 	}
@@ -39,7 +38,7 @@ public class FlagUnlock extends DevicePolicyUnlockMethod {
 		super.onActivityEvent(event);
 
 		// We can safely reset password in onDestroy method of activity because the screen should be already unlocked.
-		if (event.equals("onDestroy")) {             
+		if (event.equals("onDestroy")) {
 			restorePassword();
 		// Finish event just after FLAG_DISMISS_KEYGUARD was applied to window.
 		} else if (event.equals("onAttachedToWindow")) {

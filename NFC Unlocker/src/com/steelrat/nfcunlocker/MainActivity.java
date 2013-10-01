@@ -7,7 +7,6 @@ import java.util.Map;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.steelrat.nfcunlocker.settingsactivity.SettingsActivity;
 import com.steelrat.nfcunlocker.settingsactivity.SettingsActivityBase;
 
 import android.app.AlertDialog;

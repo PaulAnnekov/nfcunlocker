@@ -1,7 +1,6 @@
 package com.steelrat.nfcunlocker.unlockmethods;
 
 import android.app.Activity;
-import android.util.Log;
 
 public class UnlockMethodFactory {
 	public static UnlockMethod getUnlockMethod(Activity activity, String methodName) {
