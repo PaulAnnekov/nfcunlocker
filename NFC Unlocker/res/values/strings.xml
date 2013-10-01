@@ -23,4 +23,5 @@
 	<string name="enable">Enable</string>
 	<string name="version">version: %s</string>
 	<string name="github"><a href="https://github.com/PaulAnnekov/nfcunlocker">Github</a></string>
+	<string name="developer">by Paul Annekov</string>
 </resources>

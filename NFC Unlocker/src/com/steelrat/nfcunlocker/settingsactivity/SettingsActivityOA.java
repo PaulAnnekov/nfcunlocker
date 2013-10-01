@@ -38,7 +38,8 @@ public class SettingsActivityOA extends SettingsActivityBase {
 							Object newValue) {
 						return changeUnlockMethod((String) newValue);
 					}
-				});
+				}
+		);
 
 		findPreference("password").setOnPreferenceClickListener(
 				new OnPreferenceClickListener() {
@@ -49,7 +50,8 @@ public class SettingsActivityOA extends SettingsActivityBase {
 						
 						return false;
 					}
-				});
+				}
+		);
 	}
 
 	private void loadAbout() {
