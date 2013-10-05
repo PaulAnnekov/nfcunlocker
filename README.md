@@ -3,23 +3,34 @@ NFC Unlocker
 
 NFC Unlocker is the Android application that makes it possible to unlock the secured lock screen using NFC tags.
 
-Android API does not support unlock of secured lock screen. I have made some workaround using `input` shell command that automatically enters password instead of a user.
+Android API doesn't provide simple way to permanently unlock secured lock screen, therefore NFC Unlocker can use
+one of several workarounds (unlock methods).
 
 
 
-Supported lock screen security options
---------------------------------------
+Unlock methods
+--------------
 
-* PIN
-* Password
+* Flag. Uses window flags that dismisses lock screen.
+* Input. Enters password into field instead of user using `input` shell command. The most stable, but requires root
+  and supports only PIN and Password lock (no patterns).
+* KeyguardLock. It's pretty stable but uses deprecated features (still works on 4.3).
 
 
 
 Firmware requirements
 ---------------------
 
-* **Root** to run shell commands.
-* **Modified NfcNci.apk** that can poll while the screen is locked. You can obtain it [here][1] for Google Nexus 4.
+* **Root** if using *Input* unlock method.
+* **Modified NfcNci.apk** that can poll while the screen is locked. Here are some apk's for popular devices:
+ * [Google Nexus 4][Nexus 4 apk]
+ * [HTC One][HTC One apk]
+ * [Samsung Galaxy S4][Galaxy S4 apk]
+ * [Sony Xperia Z][Xperia Z apk]
+ * [Samsung Galaxy Note ll][Galaxy Note ll apk]
+ 
+If your device is not listed here then just try to search using such keywords: 
+"*nfc while screen is locked yourdevicename*".
 
 
 
@@ -67,4 +78,8 @@ License
 
 
 
- [1]: http://forum.xda-developers.com/showthread.php?t=2026439
+ [Nexus 4 apk]: http://forum.xda-developers.com/showthread.php?t=2026439
+ [HTC One apk]: http://forum.xda-developers.com/showthread.php?t=2325410
+ [Galaxy S4 apk]: http://forum.xda-developers.com/showthread.php?t=2285978
+ [Xperia Z apk]: http://forum.xda-developers.com/showthread.php?t=2330677
+ [Galaxy Note ll apk]: http://forum.xda-developers.com/showthread.php?t=2293467
