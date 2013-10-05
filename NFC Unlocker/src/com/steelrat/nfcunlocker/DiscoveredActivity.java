@@ -1,5 +1,6 @@
 package com.steelrat.nfcunlocker;
 
+import com.steelrat.nfcunlocker.helpers.TagsStorage;
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethodFactory;
 

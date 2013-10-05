@@ -3,6 +3,7 @@ package com.steelrat.nfcunlocker;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.steelrat.nfcunlocker.helpers.TagsStorage;
 
 import android.app.PendingIntent;
 import android.content.Intent;

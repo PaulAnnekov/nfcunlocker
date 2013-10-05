@@ -1,4 +1,4 @@
-package com.steelrat.nfcunlocker;
+package com.steelrat.nfcunlocker.helpers;
 
 import android.app.admin.DeviceAdminReceiver;
 import android.content.Context;

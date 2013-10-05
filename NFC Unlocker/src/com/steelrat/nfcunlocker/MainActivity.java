@@ -7,6 +7,7 @@ import java.util.Map;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.steelrat.nfcunlocker.helpers.TagsStorage;
 import com.steelrat.nfcunlocker.settingsactivity.SettingsActivityBase;
 
 import android.app.AlertDialog;
@@ -21,6 +22,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class MainActivity extends SherlockListActivity {
 	TagsStorage mTagsStorage;
@@ -40,19 +42,36 @@ public class MainActivity extends SherlockListActivity {
 		
 		setContentView(R.layout.activity_main);
 		
-		if (!isNfcSupported()) {
-			findViewById(android.R.id.list).setVisibility(View.GONE);
-			findViewById(R.id.errorText).setVisibility(View.VISIBLE);
-			return;
-		}
-		
 		if (mIsDialog)
 			checkNFCState();
 			
 		registerForContextMenu(getListView());
 		
+		displayContent();
+	}
+
+	private void displayContent() {
 		mTagsStorage = new TagsStorage(this);
 		mTags = mTagsStorage.getAllTags();
+		
+		View listView = (View) findViewById(android.R.id.list);
+		TextView informationText = (TextView) findViewById(R.id.errorText);
+		String information = null;
+		
+		if (!isNfcSupported()) {
+			information = getString(R.string.error_nfc_not_supported);
+		} else if (mTags.isEmpty()) {
+			information = getString(R.string.info_no_tags);
+		}
+		
+		// Display information text instead of list.
+		if (information != null) {
+			listView.setVisibility(View.GONE);
+			informationText.setText(information);
+			informationText.setVisibility(View.VISIBLE);
+			
+			return;
+		}
 		
 	    String[] from = {"name", "id"};
 	    int[] to = {android.R.id.text1, android.R.id.text2};
@@ -62,7 +81,7 @@ public class MainActivity extends SherlockListActivity {
 	    
 		setListAdapter(mListAdapter);
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;

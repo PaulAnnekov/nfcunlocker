@@ -61,7 +61,7 @@
         </activity>
 
         <receiver
-            android:name="com.steelrat.nfcunlocker.AppDeviceAdminReceiver"
+            android:name="com.steelrat.nfcunlocker.helpers.AppDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN" >
             <meta-data
                 android:name="android.app.device_admin"

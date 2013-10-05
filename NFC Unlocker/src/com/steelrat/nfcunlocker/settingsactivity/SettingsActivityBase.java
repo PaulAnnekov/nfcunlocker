@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
-import com.steelrat.nfcunlocker.AppDeviceAdminReceiver;
 import com.steelrat.nfcunlocker.NFCApplication;
 import com.steelrat.nfcunlocker.R;
+import com.steelrat.nfcunlocker.helpers.AppDeviceAdminReceiver;
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethod;
 import com.steelrat.nfcunlocker.unlockmethods.UnlockMethodFactory;
 

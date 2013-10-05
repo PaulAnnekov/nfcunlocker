@@ -18,6 +18,7 @@
 	<string name="error_no_tag_scanned">Scan the tag</string>
 	<string name="error_root_access">Root access required</string>
 	<string name="error_nfc_not_supported">Device doesn\'t support NFC</string>
+	<string name="info_no_tags">No tags. Click \"Add Tag\" button to scan new tag</string>
 	<string name="nfc_disabled_title">NFC service disabled</string>
 	<string name="nfc_disabled_message">Enable NFC service before using application.</string>
 	<string name="enable">Enable</string>

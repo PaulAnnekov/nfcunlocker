@@ -1,4 +1,4 @@
-package com.steelrat.nfcunlocker;
+package com.steelrat.nfcunlocker.helpers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class TagsStorage {
 	SharedPreferences.Editor mEditor;
 	final String TAGS_FILE_NAME = "tags";
 	
-	TagsStorage(Activity activity) {
+	public TagsStorage(Activity activity) {
 		mSettings = activity.getSharedPreferences(TAGS_FILE_NAME, Activity.MODE_PRIVATE);
 	    mEditor = mSettings.edit();
 	}
