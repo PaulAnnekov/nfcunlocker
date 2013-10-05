@@ -11,10 +11,10 @@ one of several workarounds (unlock methods).
 Unlock methods
 --------------
 
-* Flag. Uses window flags that dismisses lock screen.
-* Input. Enters password into field instead of user using `input` shell command. The most stable, but requires root
+* **Flag**. Uses window flags that dismisses lock screen.
+* **Input**. Enters password into field instead of user using `input` shell command. The most stable, but requires root
   and supports only PIN and Password lock (no patterns).
-* KeyguardLock. It's pretty stable but uses deprecated features (still works on 4.3).
+* **KeyguardLock**. It's pretty stable but uses deprecated features (still works on 4.3).
 
 
 
