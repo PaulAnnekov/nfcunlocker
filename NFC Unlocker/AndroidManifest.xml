@@ -4,14 +4,14 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- API 10 - minimum level that supports NFC in its present form -->
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="18" />
 
+    <!-- Allow KeyguardLock to disable keyguard  -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.NFC" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.nfc"
