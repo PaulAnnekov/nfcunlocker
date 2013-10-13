@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.steelrat.nfcunlocker"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.0.1" >
 
     <!-- API 10 - minimum level that supports NFC in its present form -->
     <uses-sdk
@@ -12,7 +12,9 @@
     <!-- Allow KeyguardLock to disable keyguard  -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.NFC" />
-
+    <!-- Allow ACRA to send exceptions reports  -->
+	<uses-permission android:name="android.permission.INTERNET" />
+    
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
@@ -30,7 +32,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
-                <category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
