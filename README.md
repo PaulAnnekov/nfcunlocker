@@ -6,6 +6,10 @@ NFC Unlocker is the Android application that makes it possible to unlock the sec
 Android API doesn't provide simple way to permanently unlock secured lock screen, therefore NFC Unlocker can use
 one of several workarounds (unlock methods).
 
+Try it from [Google Play].
+
+[![Watch the guide](http://img.youtube.com/vi/rPE6clanMaY/0.jpg)](http://www.youtube.com/watch?v=rPE6clanMaY)
+
 
 
 Unlock methods
@@ -83,3 +87,6 @@ License
  [Galaxy S4 apk]: http://forum.xda-developers.com/showthread.php?t=2285978
  [Xperia Z apk]: http://forum.xda-developers.com/showthread.php?t=2330677
  [Galaxy Note ll apk]: http://forum.xda-developers.com/showthread.php?t=2293467
+ [Google Play]: https://play.google.com/store/apps/details?id=com.steelrat.nfcunlocker
+ [Youtube Guide]: http://youtu.be/rPE6clanMaY
+ 
