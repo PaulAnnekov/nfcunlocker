@@ -33,6 +33,8 @@ public class DiscoveredActivity extends Activity {
 				  
 		// Finish activity if the screen is not locked, unlock method is not set or the password is empty.
 		if (!keyguardManager.inKeyguardRestrictedInputMode() || mUnlockMethod == null || password.length() == 0) {
+			// Unset unlock method to prevent from calling its events.
+			mUnlockMethod = null;
 			finish();
 			return;
 		}
