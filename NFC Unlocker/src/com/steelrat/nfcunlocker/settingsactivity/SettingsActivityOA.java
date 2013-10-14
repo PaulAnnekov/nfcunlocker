@@ -58,6 +58,6 @@ public class SettingsActivityOA extends SettingsActivityBase {
 
 		ViewGroup aboutView = (ViewGroup) ((ViewGroup) findViewById(android.R.id.content))
 				.getChildAt(0);
-		updateAbout(aboutView);
+		loadAbout(aboutView);
 	}
 }

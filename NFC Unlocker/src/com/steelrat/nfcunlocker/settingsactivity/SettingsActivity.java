@@ -58,7 +58,7 @@ public class SettingsActivity extends SettingsActivityBase {
 			ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.settings_about, container, false);
 			
 			SettingsActivity activity = (SettingsActivity) getActivity();
-			activity.updateAbout(rootView);
+			activity.loadAbout(rootView);
 			
 			return rootView;
 		}

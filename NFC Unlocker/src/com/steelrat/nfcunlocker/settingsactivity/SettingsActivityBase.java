@@ -63,6 +63,11 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 		return true;
 	}
 
+	/**
+	 * Checks if application has administrative permissions.
+	 * 
+	 * @return Returns true if it has or false otherwise.
+	 */
 	protected boolean isActiveAdmin() {
 		return mDPM.isAdminActive(mAppDeviceAdmin);
 	}
@@ -85,6 +90,9 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 		}
 	}
 	
+	/**
+	 * Sends admin rights request to user.
+	 */
 	protected void enableAdmin() {
 		if (!isActiveAdmin()) {
 			// Launch the activity to have the user enable our admin.
@@ -100,10 +108,21 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 		}
 	}
 	
+	/**
+	 * Deactivates current unlock method (if set) and activates new method.
+	 * 
+	 * @param name Method name.
+	 * @return Returns true if new method was successfully activated or false 
+	 * on error (previous method will be reactivated).
+	 */
 	protected boolean changeUnlockMethod(String name) {
 		UnlockMethod unlockMethod = UnlockMethodFactory.getUnlockMethod(this,
 				name);
 
+		if (unlockMethod.equals(mPrevUnlockMethod)) {
+			return true;
+		}
+		
 		// Deactivate previous unlock method.
 		if (mPrevUnlockMethod != null) {
 			mPrevUnlockMethod.onDeactivate();
@@ -126,7 +145,12 @@ public abstract class SettingsActivityBase extends SherlockPreferenceActivity im
 		return true;
 	}
 	
-	protected void updateAbout(ViewGroup aboutView) {
+	/**
+	 * Loads About page layout.
+	 * 
+	 * @param aboutView Root view of About page.
+	 */
+	protected void loadAbout(ViewGroup aboutView) {
 		String version = NFCApplication.getVersion();
 		
 		TextView versionText = (TextView) aboutView.findViewById(R.id.versionText);
