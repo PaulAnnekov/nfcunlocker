@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Screen unlock method that uses KeyguardLock class to dismiss/re-enable keyguard and 
@@ -44,7 +45,8 @@ public class KeyguardUnlock extends DevicePolicyUnlockMethod {
 
 		// Launch service that will host broadcast receiver for screen off action.
 		Intent i = new Intent(context, KeyguardService.class);
-        i.putExtra("password", password);
+        i.setAction(KeyguardService.ACTION_INIT);
+		i.putExtra("password", password);
         context.startService(i);
 	}
 	
@@ -64,6 +66,7 @@ public class KeyguardUnlock extends DevicePolicyUnlockMethod {
 
 		// Stop service that may running.
 		Intent i = new Intent(getActivity(), KeyguardService.class);
+		i.setAction("");
 		getActivity().stopService(i);
 	}
 	
@@ -79,16 +82,23 @@ public class KeyguardUnlock extends DevicePolicyUnlockMethod {
 	
 	public static class KeyguardService extends Service {
 		BroadcastReceiver mReceiver;
-	    boolean mIsRegistered = false;
-	    
+		String mPassword;
+		public static final String ACTION_INIT = "com.steelrat.nfcunlocker.unlockmethods.ACTION_INIT";
+		public static final String ACTION_LOCK = "com.steelrat.nfcunlocker.unlockmethods.ACTION_LOCK";
+		
 	    @Override
 		public int onStartCommand(Intent intent, int flags, int startId) {
-			// Create new broadcast receiver for screen off action.
-			if (!mIsRegistered) {
-				mReceiver = new ScreenReceiver(intent.getExtras().getString("password"));
+	    	// TODO: intent may be null if service was killed by OS and re-created.
+	    	String action = intent.getAction();
+	    	
+	    	// Create new broadcast receiver for screen off action.
+			if (action.equals(ACTION_INIT)) {
+				mPassword = intent.getStringExtra("password");
+				mReceiver = new ScreenReceiver();
 				IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 		        registerReceiver(mReceiver, filter);
-		        mIsRegistered = true;
+			} else if (action.equals(ACTION_LOCK)) {
+				stopSelf();
 			}
 
 			return super.onStartCommand(intent, flags, startId);
@@ -98,25 +108,25 @@ public class KeyguardUnlock extends DevicePolicyUnlockMethod {
 	    public void onDestroy() {
 	    	super.onDestroy();
 
-	    	if (mIsRegistered) {
-	    		// Call onReceive before destroy to restore keyguard state.
-	    		mReceiver.onReceive(this, null);
+	    	if (mReceiver != null) {
+	    		restoreKeygurad();
 	    		unregisterReceiver(mReceiver);
 	    	}
 	    }
 		
-		private class ScreenReceiver extends BroadcastReceiver {
-			String mPassword;
-			
-			public ScreenReceiver(String password) {
-				mPassword = password;
-			}
-			
+	    private void restoreKeygurad() {
+	    	// Re-enable keyguard and set password back.
+			getKeyguardLock(this).reenableKeyguard();
+			KeyguardUnlock.setPassword(this, mPassword);
+	    }
+	    
+		private class ScreenReceiver extends BroadcastReceiver {		
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				// Re-enable keyguard and set password back.
-				getKeyguardLock(context).reenableKeyguard();
-				KeyguardUnlock.setPassword(context, mPassword);
+				// Send message to service to re-lock screen.
+				Intent i = new Intent(context, KeyguardService.class);
+		        i.setAction(KeyguardService.ACTION_LOCK);
+		        context.startService(i);
 			}
 		}
 		
