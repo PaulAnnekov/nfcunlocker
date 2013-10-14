@@ -5,6 +5,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_discovered">NFC Unlocker</string>
     <string name="title_activity_main">NFC Unlocker</string>
+    <string name="title_service_keyguard">Keyguard Watcher</string>
     <string name="action_settings">Settings</string>
     <string name="action_add">Add Tag</string>
     <string name="action_save">Save</string>

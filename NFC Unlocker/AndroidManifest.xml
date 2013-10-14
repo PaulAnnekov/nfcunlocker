@@ -75,7 +75,9 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".unlockmethods.KeyguardUnlock$KeyguardService" >
+        <service 
+            android:name=".unlockmethods.KeyguardUnlock$KeyguardService"
+            android:label="@string/title_service_keyguard" >
         </service>
     </application>
 
