@@ -15,7 +15,7 @@
     <string-array name="pref_unlock_method_entries">
 	   <item>Flag</item>
 	   <item>Input</item>
-	   <item>KeyguardLock</item>
+	   <item>KeyguardLock (unstable)</item>
 	</string-array>
 	 
 	<string-array name="pref_unlock_method_values">

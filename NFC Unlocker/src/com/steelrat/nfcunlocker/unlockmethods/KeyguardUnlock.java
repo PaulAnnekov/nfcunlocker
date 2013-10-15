@@ -88,7 +88,6 @@ public class KeyguardUnlock extends DevicePolicyUnlockMethod {
 		
 	    @Override
 		public int onStartCommand(Intent intent, int flags, int startId) {
-	    	// TODO: intent may be null if service was killed by OS and re-created.
 	    	String action = intent.getAction();
 	    	
 	    	// Create new broadcast receiver for screen off action.
@@ -101,15 +100,18 @@ public class KeyguardUnlock extends DevicePolicyUnlockMethod {
 				stopSelf();
 			}
 
-			return super.onStartCommand(intent, flags, startId);
+			// Don't restart service after kill. Keyguard will be re-enabled in
+			// onDestroy automatically.
+			return START_NOT_STICKY;
 		}
 	    
 	    @Override
 	    public void onDestroy() {
 	    	super.onDestroy();
 
+	    	restoreKeygurad();
+	    	
 	    	if (mReceiver != null) {
-	    		restoreKeygurad();
 	    		unregisterReceiver(mReceiver);
 	    	}
 	    }
